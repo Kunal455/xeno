@@ -24,20 +24,19 @@ services:
         placeholder: "Enter your App-specific password"
       - key: SMTP_FROM
         placeholder: '"Xeno CRM" <your-email@gmail.com>'
+      - key: CHANNEL_SERVICE_URL
+        placeholder: "Enter the deployed Channel Service URL (e.g. https://xeno-channel-service.onrender.com)"
 
-  # CRM Frontend Static Site
+  # Simulated Channel Delivery Service
   - type: web
-    name: xeno-crm-frontend
-    env: static
+    name: xeno-channel-service
+    env: node
     plan: free
-    rootDir: frontend
-    buildCommand: npm install && npm run build
-    publishDir: dist
-    routes:
-      - src: /*
-        dest: /index.html
+    rootDir: channel-service
+    buildCommand: npm install
+    startCommand: npm start
     envVars:
-      - key: VITE_API_URL
-        placeholder: "Enter your deployed backend URL followed by /api (e.g. https://xeno-crm-backend.onrender.com/api)"
-      - key: VITE_SOCKET_URL
-        placeholder: "Enter your deployed backend URL (e.g. https://xeno-crm-backend.onrender.com)"
+      - key: PORT
+        value: 10000
+      - key: CRM_WEBHOOK_URL
+        placeholder: "Enter the CRM Backend URL followed by /api/receipt (e.g. https://xeno-crm-backend.onrender.com/api/receipt)"
