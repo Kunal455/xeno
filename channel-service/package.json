@@ -1,0 +1,16 @@
+{
+  "name": "channel-service",
+  "version": "1.0.0",
+  "description": "Simulation service for sending campaigns",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "axios": "^1.6.5",
+    "cors": "^2.8.5",
+    "express": "^4.18.2"
+  }
+}
