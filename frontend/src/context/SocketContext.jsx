@@ -10,7 +10,7 @@ export const SocketProvider = ({ children }) => {
 
   useEffect(() => {
     // Connect to the backend server
-    const socketUrl = 'http://localhost:5001';
+    const socketUrl = import.meta.env.VITE_SOCKET_URL || 'http://localhost:5001';
     console.log(`[Socket] Connecting to ${socketUrl}...`);
     const newSocket = io(socketUrl, {
       autoConnect: true,
