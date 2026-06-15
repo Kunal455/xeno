@@ -5,7 +5,6 @@ import Communication from '../models/Communication.js';
 import Customer from '../models/Customer.js';
 import { sendBulkCommunications } from './channelService.js';
 import { sendEmail } from './mailService.js';
-import { sendSMS, sendWhatsApp } from './twilioService.js';
 import { notifyClients } from '../config/socket.js';
 
 export const createCampaign = async (data) => {
@@ -78,33 +77,7 @@ export const launchCampaign = async (campaignId) => {
       }
     }
 
-    // Send Real SMS if channel is sms
-    if (campaign.channel === 'sms') {
-      console.log(`[Campaign Service] Dispatching real SMS for campaign "${campaign.name}"...`);
-      for (const comm of savedCommunications) {
-        const customer = customers.find(c => c._id.toString() === comm.customerId.toString());
-        if (customer && customer.phone) {
-          sendSMS({
-            to: customer.phone,
-            message: comm.message
-          }).catch(err => console.error(`[Campaign Service] Twilio SMS failed for customer ${customer.phone}:`, err.message));
-        }
-      }
-    }
 
-    // Send Real WhatsApp if channel is whatsapp
-    if (campaign.channel === 'whatsapp') {
-      console.log(`[Campaign Service] Dispatching real WhatsApp for campaign "${campaign.name}"...`);
-      for (const comm of savedCommunications) {
-        const customer = customers.find(c => c._id.toString() === comm.customerId.toString());
-        if (customer && customer.phone) {
-          sendWhatsApp({
-            to: customer.phone,
-            message: comm.message
-          }).catch(err => console.error(`[Campaign Service] Twilio WhatsApp failed for customer ${customer.phone}:`, err.message));
-        }
-      }
-    }
 
     // 5. Send To Channel Service (simulates receipt cycle: delivered -> opened -> clicked)
     const payloads = savedCommunications.map(comm => ({
