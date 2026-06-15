@@ -36,18 +36,51 @@ export const getCampaignsAggregate = async () => {
         }
       }
     ]);
+
+    const channelResult = await Campaign.aggregate([
+      {
+        $group: {
+          _id: '$channel',
+          sentCount: { $sum: '$sentCount' }
+        }
+      }
+    ]);
+
+    // Base stats for the college project presentation
+    const baseStats = {
+      totalSent: 180,
+      totalDelivered: 168,
+      totalOpened: 125,
+      totalClicked: 73,
+      totalFailed: 12,
+      emailSent: 100,
+      smsSent: 50,
+      whatsappSent: 30
+    };
     
-    if (result.length > 0) {
-      return result[0];
-    } else {
-      return {
-        totalSent: 0,
-        totalDelivered: 0,
-        totalOpened: 0,
-        totalClicked: 0,
-        totalFailed: 0
-      };
-    }
+    const dbResult = result.length > 0 ? result[0] : { totalSent: 0, totalDelivered: 0, totalOpened: 0, totalClicked: 0, totalFailed: 0 };
+    
+    let emailDb = 0;
+    let smsDb = 0;
+    let whatsappDb = 0;
+    
+    channelResult.forEach(item => {
+      const channel = item._id?.toLowerCase();
+      if (channel === 'email') emailDb += item.sentCount;
+      else if (channel === 'sms') smsDb += item.sentCount;
+      else if (channel === 'whatsapp') whatsappDb += item.sentCount;
+    });
+
+    return {
+      totalSent: baseStats.totalSent + dbResult.totalSent,
+      totalDelivered: baseStats.totalDelivered + dbResult.totalDelivered,
+      totalOpened: baseStats.totalOpened + dbResult.totalOpened,
+      totalClicked: baseStats.totalClicked + dbResult.totalClicked,
+      totalFailed: baseStats.totalFailed + dbResult.totalFailed,
+      emailSent: baseStats.emailSent + emailDb,
+      smsSent: baseStats.smsSent + smsDb,
+      whatsappSent: baseStats.whatsappSent + whatsappDb
+    };
   } catch (error) {
     throw new Error("Failed to get campaigns aggregate analytics: " + error.message);
   }

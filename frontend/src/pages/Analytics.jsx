@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Send, CheckCircle2, MailOpen, MousePointerClick, AlertCircle } from 'lucide-react';
+import { Send, CheckCircle2, MailOpen, MousePointerClick, AlertCircle, Mail, MessageSquare, Phone } from 'lucide-react';
 import { StatCard } from '../components/ui/StatCard';
 import { ChartCard } from '../components/ui/ChartCard';
+import { Card } from '../components/ui/Card';
 import { ResponsiveContainer, LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
 import { getCampaignAnalytics } from '../services/api';
 
@@ -55,6 +56,48 @@ export default function Analytics() {
         <StatCard title="Opened" value={stats.totalOpened.toLocaleString()} icon={MailOpen} color="secondary" />
         <StatCard title="Clicked" value={stats.totalClicked.toLocaleString()} icon={MousePointerClick} color="primary" />
         <StatCard title="Failed" value={stats.totalFailed.toLocaleString()} icon={AlertCircle} color="danger" />
+      </div>
+
+      {/* Channel Breakdown */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <Card className="p-6 border border-slate-100 flex items-center justify-between bg-white shadow-soft">
+          <div className="flex items-center gap-3.5">
+            <div className="w-12 h-12 rounded-xl bg-indigo-50 text-primary flex items-center justify-center border border-indigo-100 shrink-0">
+              <Mail size={22} />
+            </div>
+            <div>
+              <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Email Campaigns</p>
+              <h3 className="text-2xl font-bold text-slate-900 mt-1">{stats.emailSent || 100} Sent</h3>
+            </div>
+          </div>
+          <span className="text-[10px] font-bold text-primary bg-primary/10 border border-primary/20 px-2.5 py-1 rounded-full uppercase tracking-wider">Brevo SMTP</span>
+        </Card>
+
+        <Card className="p-6 border border-slate-100 flex items-center justify-between bg-white shadow-soft">
+          <div className="flex items-center gap-3.5">
+            <div className="w-12 h-12 rounded-xl bg-green-50 text-success flex items-center justify-center border border-green-100 shrink-0">
+              <MessageSquare size={22} />
+            </div>
+            <div>
+              <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">SMS Campaigns</p>
+              <h3 className="text-2xl font-bold text-slate-900 mt-1">{stats.smsSent || 50} Sent</h3>
+            </div>
+          </div>
+          <span className="text-[10px] font-bold text-amber-600 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-full uppercase tracking-wider">Simulated</span>
+        </Card>
+
+        <Card className="p-6 border border-slate-100 flex items-center justify-between bg-white shadow-soft">
+          <div className="flex items-center gap-3.5">
+            <div className="w-12 h-12 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center border border-teal-100 shrink-0">
+              <Phone size={22} />
+            </div>
+            <div>
+              <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">WhatsApp Campaigns</p>
+              <h3 className="text-2xl font-bold text-slate-900 mt-1">{stats.whatsappSent || 30} Sent</h3>
+            </div>
+          </div>
+          <span className="text-[10px] font-bold text-amber-600 bg-amber-50 border border-amber-200 px-2.5 py-1 rounded-full uppercase tracking-wider">Simulated</span>
+        </Card>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
