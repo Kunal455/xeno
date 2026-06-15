@@ -1,0 +1,43 @@
+services:
+  # CRM Backend Service
+  - type: web
+    name: xeno-crm-backend
+    env: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: MONGO_URI
+        placeholder: "Enter your MongoDB Atlas Connection URI"
+      - key: GEMINI_API_KEY
+        placeholder: "Enter your Gemini API key"
+      - key: SMTP_HOST
+        placeholder: "smtp.gmail.com"
+      - key: SMTP_PORT
+        placeholder: "587"
+      - key: SMTP_USER
+        placeholder: "Enter your Gmail address"
+      - key: SMTP_PASS
+        placeholder: "Enter your App-specific password"
+      - key: SMTP_FROM
+        placeholder: '"Xeno CRM" <your-email@gmail.com>'
+
+  # CRM Frontend Static Site
+  - type: web
+    name: xeno-crm-frontend
+    env: static
+    plan: free
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    publishDir: dist
+    routes:
+      - src: /*
+        dest: /index.html
+    envVars:
+      - key: VITE_API_URL
+        placeholder: "Enter your deployed backend URL followed by /api (e.g. https://xeno-crm-backend.onrender.com/api)"
+      - key: VITE_SOCKET_URL
+        placeholder: "Enter your deployed backend URL (e.g. https://xeno-crm-backend.onrender.com)"
