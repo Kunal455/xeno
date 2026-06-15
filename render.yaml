@@ -11,21 +11,21 @@ services:
       - key: PORT
         value: 10000
       - key: MONGO_URI
-        placeholder: "Enter your MongoDB Atlas Connection URI"
+        sync: false
       - key: GEMINI_API_KEY
-        placeholder: "Enter your Gemini API key"
+        sync: false
       - key: SMTP_HOST
-        placeholder: "smtp.gmail.com"
+        value: smtp.gmail.com
       - key: SMTP_PORT
-        placeholder: "587"
+        value: 587
       - key: SMTP_USER
-        placeholder: "Enter your Gmail address"
+        sync: false
       - key: SMTP_PASS
-        placeholder: "Enter your App-specific password"
+        sync: false
       - key: SMTP_FROM
-        placeholder: '"Xeno CRM" <your-email@gmail.com>'
+        value: '"Xeno CRM" <your-email@gmail.com>'
       - key: CHANNEL_SERVICE_URL
-        placeholder: "Enter the deployed Channel Service URL (e.g. https://xeno-channel-service.onrender.com)"
+        sync: false
 
   # Simulated Channel Delivery Service
   - type: web
@@ -39,4 +39,4 @@ services:
       - key: PORT
         value: 10000
       - key: CRM_WEBHOOK_URL
-        placeholder: "Enter the CRM Backend URL followed by /api/receipt (e.g. https://xeno-crm-backend.onrender.com/api/receipt)"
+        sync: false
